@@ -1,0 +1,56 @@
+# .NET Core / Blazor
+bin/
+obj/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VS Code specific files
+.vscode/
+*.code-workspace
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Web specific files
+*.log
+*.lock.json
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/
+out/
+.bower-cache/
+.bower-registry/
+.bower-tmp/
+.temp/
+
+# Mac specific files
+.DS_Store
+
+# Linux specific files
+*~
+
+# Build directories
+wwwroot/css/
+wwwroot/js/

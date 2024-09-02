@@ -54,3 +54,6 @@ out/
 # Build directories
 wwwroot/css/
 wwwroot/js/
+.
+#vs solution file
+*.sln

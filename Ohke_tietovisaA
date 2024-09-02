@@ -1,0 +1,22 @@
+using System;
+using System.IO;
+
+class Ohke_tietovisaA
+{
+    static void Main()
+    {
+        string filePath = "Ohke_tietovisaA.csv";
+
+        string[] data = { "Kysymys, Vastaus, Vaihtoehto" };
+
+        using (StreamWriter writer = new StreamWriter(filePath))
+
+        {
+            foreach (string line in data)
+            {
+                writer.WriteLine(line);
+            }
+        }
+        Console.WriteLine("toimii");
+    }
+}

@@ -1,0 +1,66 @@
+﻿@page "/"
+
+<PageTitle>Menu</PageTitle>
+
+<style>
+    /* General CSS to center elements and style the circular button */
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        /* Full height of the viewport to center vertically */
+    }
+
+    .circle-button {
+        width: 100px;
+        /* Set width and height to the same value for a circle */
+        height: 100px;
+        border-radius: 50%;
+        /* Makes the button circular */
+        background-color: #FFC0CB;
+        /* Button color, can be changed */
+        color: white;
+        /* Text color */
+        font-size: 16px;
+        /* Font size of the button text */
+        border: none;
+        /* Removes border */
+        cursor: pointer;
+        /* Changes cursor to pointer on hover */
+        transition: transform 0.2s;
+        /* Smooth transition for hover effect */
+    }
+
+    .circle-button:hover {
+        background-color: #FF00FF;
+        /* Darker shade on hover */
+        transform: scale(1.2);
+        /* Enlarge button slightly on hover */
+    }
+</style>
+
+<!-- Use "onsubmit" event handler to prevent form default submission -->
+<form onsubmit="event.preventDefault();">
+    <label for="username1">Player1:</label>
+    <input type="text" id="username1" name="username1">
+    <button type="submit">Submit</button>
+</form>
+
+<form onsubmit="event.preventDefault();">
+    <label for="username2">Player2:</label>
+    <input type="text" id="username2" name="username2">
+    <button type="submit">Submit</button>
+</form>
+
+<div class="center-container">
+    <!-- This button will be in the center and styled as a circle -->
+    <button type="button" class="circle-button" onclick="redirectToCounter()">Start</button>
+</div>
+
+<script>
+    // JavaScript function to handle button click and redirect
+    function redirectToCounter() {
+        window.location.href = "http://localhost:5056/counter";
+    }
+</script>

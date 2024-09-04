@@ -22,13 +22,23 @@ else
                 @for (int i = 0; i < currentQuestion.Options.Length; i++)
                 {
                     <div class="col-6">
-                        <button class="btn btn-primary option-button"
-                            @onclick="() => SelectOption(i)">@currentQuestion.Options[i]</button>
+                        <button class="btn btn-primary option-button" @onclick="() => SelectOption(i)"
+                            disabled="@disableOptions">
+                            @currentQuestion.Options[i]
+                        </button>
                     </div>
                 }
             </div>
         </div>
         <p>@resultMessage</p>
+        <div class="navigation-buttons">
+            <button class="btn btn-secondary" @onclick="PreviousQuestion" disabled="@(!CanGoPrevious)">
+                Previous
+            </button>
+            <button class="btn btn-secondary" @onclick="NextQuestion" disabled="@(!CanGoNext)">
+                Next
+            </button>
+        </div>
     </div>
 }
 
@@ -60,6 +70,14 @@ else
     .option-button {
         width: 100%;
     }
+
+    .navigation-buttons {
+        margin-top: 20px;
+    }
+
+    .navigation-buttons button {
+        margin: 0 10px;
+    }
 </style>
 
 @code {
@@ -67,6 +85,7 @@ else
     private (string Question, string[] Options, string Answer) currentQuestion;
     private int currentQuestionIndex = 0;
     private string resultMessage;
+    private bool disableOptions = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -91,16 +110,32 @@ else
             resultMessage = "Incorrect.";
         }
 
-        // Load the next question or reset
-        if (currentQuestionIndex < questions.Count - 1)
+        // Disable options after selecting an answer
+        disableOptions = true;
+    }
+
+    private void NextQuestion()
+    {
+        if (CanGoNext)
         {
             currentQuestionIndex++;
             currentQuestion = questions[currentQuestionIndex];
-            resultMessage = string.Empty; // Reset result message for the new question
-        }
-        else
-        {
-            resultMessage += " Quiz completed!";
+            resultMessage = string.Empty;
+            disableOptions = false; // Re-enable options for the new question
         }
     }
+
+    private void PreviousQuestion()
+    {
+        if (CanGoPrevious)
+        {
+            currentQuestionIndex--;
+            currentQuestion = questions[currentQuestionIndex];
+            resultMessage = string.Empty;
+            disableOptions = false; // Re-enable options for the previous question
+        }
+    }
+
+    private bool CanGoNext => currentQuestionIndex < questions.Count - 1;
+    private bool CanGoPrevious => currentQuestionIndex > 0;
 }

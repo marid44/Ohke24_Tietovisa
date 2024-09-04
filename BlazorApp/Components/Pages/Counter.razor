@@ -1,19 +1,106 @@
 ﻿@page "/counter"
-@rendermode InteractiveServer
+@inject QuizService QuizService
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>Quiz</PageTitle>
 
-<h1>Counter</h1>
+<h1>Quiz</h1>
 
-<p role="status">Current count: @currentCount</p>
+@if (questions == null)
+{
+    <p>Loading questions...</p>
+}
+else if (!questions.Any())
+{
+    <p>No questions available.</p>
+}
+else
+{
+    <div class="quiz-container">
+        <h3>@currentQuestion.Question</h3>
+        <div class="button-container">
+            <div class="row">
+                @for (int i = 0; i < currentQuestion.Options.Length; i++)
+                {
+                    <div class="col-6">
+                        <button class="btn btn-primary option-button"
+                            @onclick="() => SelectOption(i)">@currentQuestion.Options[i]</button>
+                    </div>
+                }
+            </div>
+        </div>
+        <p>@resultMessage</p>
+    </div>
+}
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<style>
+    /* Center container for quiz */
+    .quiz-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .button-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .row {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .col-6 {
+        width: 50%;
+        padding: 5px;
+    }
+
+    .option-button {
+        width: 100%;
+    }
+</style>
 
 @code {
-    private int currentCount = 0;
+    private List<(string Question, string[] Options, string Answer)> questions;
+    private (string Question, string[] Options, string Answer) currentQuestion;
+    private int currentQuestionIndex = 0;
+    private string resultMessage;
 
-    private void IncrementCount()
+    protected override async Task OnInitializedAsync()
     {
-        currentCount++;
+        await QuizService.LoadQuestionsAsync();
+        questions = QuizService.Questions;
+        if (questions.Any())
+        {
+            currentQuestion = questions[currentQuestionIndex];
+        }
+    }
+
+    private void SelectOption(int optionIndex)
+    {
+        var selectedAnswer = currentQuestion.Options[optionIndex];
+
+        if (selectedAnswer.Equals(currentQuestion.Answer, StringComparison.OrdinalIgnoreCase))
+        {
+            resultMessage = "Correct!";
+        }
+        else
+        {
+            resultMessage = "Incorrect.";
+        }
+
+        // Load the next question or reset
+        if (currentQuestionIndex < questions.Count - 1)
+        {
+            currentQuestionIndex++;
+            currentQuestion = questions[currentQuestionIndex];
+            resultMessage = string.Empty; // Reset result message for the new question
+        }
+        else
+        {
+            resultMessage += " Quiz completed!";
+        }
     }
 }
